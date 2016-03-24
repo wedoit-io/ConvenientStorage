@@ -30,6 +30,7 @@ configuration: Release
 
 build:
   parallel: true                  # enable MSBuild parallel builds
+  publish_nuget: true             # package projects with .nuspec files and push to artifacts
 
 
 # scripts to run before build
