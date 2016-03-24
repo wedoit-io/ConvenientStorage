@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+trap "echo 'error: Script failed: see failed command above'" ERR
+
+cd "$( dirname "$0" )/.." # Ensure to be at the project root directory
+
+source "script/helpers/_helpers.sh"
+
+begin
+
+topic 'Calling `script/update`...' && script/update
+
+# TODO: do something
+
+end

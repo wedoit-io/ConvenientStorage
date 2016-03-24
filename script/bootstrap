@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+trap "echo 'error: Script failed: see failed command above'" ERR
+
+cd "$( dirname "$0" )/.." # Ensure to be at the project root directory
+
+source "script/helpers/_helpers.sh"
+
+begin
+
+which bundle >/dev/null 2>&1  || { topic 'Installing bundler...'
+  gem install bundler | indent
+}
+
+bundle check 2>&1  || { topic 'Installing gem dependencies...'
+  bundle install | indent
+}
+
+topic 'Installing all required dependencies via NuGet...'
+  nuget restore src/ | indent
+
+end

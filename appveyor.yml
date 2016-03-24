@@ -1,0 +1,78 @@
+# Ref.: http://www.appveyor.com/docs/appveyor-yml
+
+# Notes:
+#   - Minimal appveyor.yml file is an empty file. All sections are optional.
+#   - Indent each level of configuration with 2 spaces. Do not use tabs!
+#   - All section names are case-sensitive.
+#   - Section names should be unique on each level.
+
+#---------------------------------#
+#      general configuration      #
+#---------------------------------#
+
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+
+# set clone depth
+clone_depth: 1                      # clone entire repository history if not defined
+
+# build cache to preserve files/folders between builds
+cache:
+  - src\packages -> src\**\packages.config  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
+
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+
+# build Configuration, i.e. Debug, Release, etc.
+configuration: Release
+
+build:
+  parallel: true                  # enable MSBuild parallel builds
+
+
+# scripts to run before build
+before_build:
+  - nuget restore src\
+
+#---------------------------------#
+#       tests configuration       #
+#---------------------------------#
+
+test:
+  assemblies:
+    - '**\*.Tests.dll'
+
+  categories:
+    except:
+      - Ignore
+      - Skip
+      - NoAutoRun
+
+
+#---------------------------------#
+#      artifacts configuration    #
+#---------------------------------#
+
+#---------------------------------#
+#     deployment configuration    #
+#---------------------------------#
+
+#---------------------------------#
+#        global handlers          #
+#---------------------------------#
+
+#---------------------------------#
+#         notifications           #
+#---------------------------------#
+
+notifications:
+
+  # Email
+  - provider: Email
+    to:
+      - a.donmez@apexnet.it
+    on_build_success: false
+    on_build_failure: true
+    on_build_status_changed: true

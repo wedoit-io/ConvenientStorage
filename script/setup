@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+trap "echo 'error: Script failed: see failed command above'" ERR
+
+cd "$( dirname "$0" )/.." # Ensure to be at the project root directory
+
+source "script/helpers/_helpers.sh"
+
+begin
+
+topic 'Removing all untracked files, including build products...'
+  git clean -fdx | indent
+
+topic 'Resetting the git index and working tree, discarding changes to tracked files in the working tree...'
+  git reset --hard | indent
+
+topic 'Calling `script/bootstrap`...' && script/bootstrap
+
+end
