@@ -5,10 +5,8 @@ namespace Convenient.Storage.Blob
 
     public interface IBlobStorage
     {
-        /// <summary>
-        ///     Saves the source.
-        /// </summary>
-        /// <returns>Saved location.</returns>
-        Task<string> SaveAsync(Stream source, string blobName);
+        Task SaveAsync(Stream source, string blobName);
+
+        Task LoadAsync(string blobName, Stream destination);
     }
 }

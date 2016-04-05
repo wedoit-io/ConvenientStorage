@@ -28,7 +28,7 @@ namespace Convenient.Storage.Blob
             this.containerName = containerName;
         }
 
-        public async Task<string> SaveAsync(Stream source, string blobName)
+        public async Task SaveAsync(Stream source, string blobName)
         {
             var blobContainer = await this.GetCloudBlobContainer()
                                           .ConfigureAwait(false);
@@ -37,8 +37,17 @@ namespace Convenient.Storage.Blob
 
             await blockBlob.UploadFromStreamAsync(source)
                            .ConfigureAwait(false);
+        }
 
-            return blockBlob.Uri.AbsoluteUri;
+        public async Task LoadAsync(string blobName, Stream destination)
+        {
+            var blobContainer = await this.GetCloudBlobContainer()
+                                          .ConfigureAwait(false);
+
+            var blockBlob = blobContainer.GetBlockBlobReference(blobName);
+
+            await blockBlob.DownloadToStreamAsync(destination)
+                           .ConfigureAwait(false);
         }
 
         #region /// internal ///////////////////////////////////////////////////
